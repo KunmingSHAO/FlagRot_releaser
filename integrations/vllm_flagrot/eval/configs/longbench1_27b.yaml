@@ -1,0 +1,24 @@
+# LongBench v1, Qwen3.8-27B only: the 6 tasks that pred.py runs without chat template (trec / triviaqa / samsum / lsht /
+# lcc / repobench-p) run WITH the chat template in non-thinking mode. Without the template Qwen3.8-27B opens a reasoning
+# block on these prompts and the scores are not meaningful. Everything else (official prompts, middle truncation to
+# 31500 tokens, greedy, lm-eval generation lengths / stop sequences / metrics, server) as longbench1.yaml; results go to
+# the same suite directory (results/tasks/longbench1/qwen38_27b/<mode>/lb1_raw).
+suite: longbench1
+models: [qwen38_27b]
+modes: [bf16, "konlya:s4w128", "konlya2:s4w128:ca", "kivi2:s4w128", "kivi2id:s4w128",
+        "kivi2p8ff:s4w128", "kivi2p8ffid:s4w128", "kivi2p8ffs:s4w128"]
+server:
+  cg_sizes: [1, 2, 4, 8, 16, 32, 64, 128, 256]
+  max_model_len: 32768
+  gpu_mem: 0.90
+  max_num_seqs: 64
+  think: 0
+tasks:
+  - name: lb1_raw
+    kind: lmeval
+    api: chat
+    include_path: lb1_tasks
+    tasks: [lb1_trec, lb1_triviaqa, lb1_samsum, lb1_lsht, lb1_lcc, lb1_repobench-p]
+    metadata: {max_prompt_tokens: 31500}
+    concurrency: 32
+    gen_kwargs: "temperature=0"

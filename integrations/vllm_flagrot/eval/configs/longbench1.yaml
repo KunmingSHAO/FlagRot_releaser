@@ -1,0 +1,37 @@
+# LongBench v1 (THUDM/LongBench, 21 tasks: 16 English + code, 5 Chinese; 4750 items).
+# Official setup (LongBench/pred.py): official prompts and data (env LB1_DIR, default data/longbench1), prompt
+# middle-truncated to 31500 tokens of the model tokenizer (model2maxlen.json value of the 32k-context models), chat
+# template for all tasks except trec / triviaqa / samsum / lsht / lcc / repobench-p (raw completion: separate lm-eval run
+# against /v1/completions), greedy decoding; max_gen_toks, stop sequences and metrics as lm-eval 0.4.13's longbench
+# tasks (lb1_tasks/, see _make_tasks.py). Qwen3 models non-thinking (think: 0). max_model_len 32768 >= 31500 + chat
+# template + 512 generated tokens.  Qwen3.8-27B: run lb1_chat with this file (--models qwen38_27b --tasks lb1_chat)
+# and lb1_raw with longbench1_27b.yaml (chat template on all tasks).
+suite: longbench1
+models: [qwen8b, llama8b_it, qwen32b]
+modes: [bf16, "konlya:s4w128", "konlya2:s4w128:ca", "kivi2:s4w128", "kivi2id:s4w128",
+        "kivi2p8ff:s4w128", "kivi2p8ffid:s4w128", "kivi2p8ffs:s4w128"]
+server:
+  cg_sizes: [1, 2, 4, 8, 16, 32, 64, 128, 256]   # fewer CUDA-graph sizes: faster startup (accuracy runs)
+  max_model_len: 32768
+  gpu_mem: 0.90
+  max_num_seqs: 64
+  think: 0                      # Qwen3 non-thinking
+tasks:
+  - name: lb1_chat              # 15 tasks with the chat template
+    kind: lmeval
+    api: chat
+    include_path: lb1_tasks
+    tasks: [lb1_narrativeqa, lb1_qasper, lb1_multifieldqa_en, lb1_multifieldqa_zh, lb1_hotpotqa, lb1_2wikimqa,
+            lb1_musique, lb1_dureader, lb1_gov_report, lb1_qmsum, lb1_multi_news, lb1_vcsum, lb1_passage_count,
+            lb1_passage_retrieval_en, lb1_passage_retrieval_zh]
+    metadata: {max_prompt_tokens: 31500}
+    concurrency: 32
+    gen_kwargs: "temperature=0"
+  - name: lb1_raw               # 6 tasks without chat template (pred.py: few-shot + code tasks)
+    kind: lmeval
+    api: completions
+    include_path: lb1_tasks
+    tasks: [lb1_trec, lb1_triviaqa, lb1_samsum, lb1_lsht, lb1_lcc, lb1_repobench-p]
+    metadata: {max_prompt_tokens: 31500}
+    concurrency: 32
+    gen_kwargs: "temperature=0"

@@ -1,0 +1,8 @@
+include: niah_single_1_fit.yaml
+task: ruler_vt_fit
+custom_dataset: !function ruler_fit_utils.get_vt_dataset
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 30
+  until: []

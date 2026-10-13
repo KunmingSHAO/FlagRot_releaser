@@ -1,0 +1,10 @@
+# simulator / calibration environment (tested: Python 3.12, torch 2.6.0+cu124, transformers 5.15.1)
+torch>=2.6
+transformers>=5.0
+numpy
+pandas
+pyarrow
+pyyaml
+huggingface_hub
+pytest
+ninja

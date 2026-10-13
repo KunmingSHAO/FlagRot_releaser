@@ -1,0 +1,23 @@
+# vllm-flagrot: FlagRot KV caches as an out-of-tree vLLM plugin. See the top-level README.md.
+# Tested with vLLM 0.30.0, torch 2.13.0+cu130, NVIDIA H20 / H200 (sm_90a).
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vllm-flagrot"
+version = "0.1.0.dev0"
+description = "FlagRot KV caches for vLLM: selective Walsh-Hadamard transforms with INT4 / INT2 / KIVI-style pages (out-of-tree plugin)"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = ["vllm==0.30.0"]
+
+# vLLM loads every "vllm.general_plugins" entry point in every process (API server, engine core, workers)
+# before the model is built (vllm/plugins/__init__.py::load_general_plugins). register() only registers the
+# attention backend CUSTOM; it is idempotent and does not touch CUDA.
+[project.entry-points."vllm.general_plugins"]
+flagrot = "vllm_flagrot:register"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["vllm_flagrot*"]

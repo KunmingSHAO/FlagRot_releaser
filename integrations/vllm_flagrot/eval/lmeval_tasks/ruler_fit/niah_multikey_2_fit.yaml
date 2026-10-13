@@ -1,0 +1,3 @@
+include: niah_single_1_fit.yaml
+task: niah_multikey_2_fit
+custom_dataset: !function ruler_fit_utils.niah_multikey_2

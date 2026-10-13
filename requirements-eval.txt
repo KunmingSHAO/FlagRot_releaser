@@ -1,0 +1,8 @@
+# task-evaluation environment (client side of eval/launch.py; tested: lm-eval 0.4.13)
+lm-eval[api,longbench,ruler]==0.4.13
+datasets
+transformers
+openai
+math-verify
+numpy
+pyyaml

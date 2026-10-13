@@ -1,0 +1,10 @@
+include: niah_single_1_fit.yaml
+task: ruler_qa_squad_fit
+custom_dataset: !function ruler_fit_utils.get_squad
+process_results: !function ruler_fit_utils.process_results_part
+test_split: test
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 32
+  until: []

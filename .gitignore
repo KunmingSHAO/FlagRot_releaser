@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+# data, models, calibration files and outputs (see README)
+/data/
+/models/
+/calib/
+/cache/
+/results/
+# kernel builds
+/build/
+integrations/vllm_flagrot/build/
+kernels/.build*/
+kernels/.deps/
+kernels/results/*
+!kernels/results/.gitkeep
+*.so
+*.o
+*.pt
+!tests/data/vllm_kv_reference.pt

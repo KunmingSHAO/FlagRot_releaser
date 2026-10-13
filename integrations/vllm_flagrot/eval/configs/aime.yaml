@@ -1,0 +1,15 @@
+# AIME 2024 + 2025 (60 problems), Qwen3-8B in thinking mode with Qwen's recommended sampling (temperature 0.6, top_p
+# 0.95, top_k 20), 8 seeds per problem (paired by problem and seed across KV modes), up to 32768 generated tokens.
+suite: aime
+models: [qwen8b]
+modes: [bf16, "konlya:s4w128", "konlya2:s4w128:ca", "kivi2:s4w128", "kivi2id:s4w128",
+        "kivi2p8ff:s4w128", "kivi2p8ffid:s4w128", "kivi2p8ffs:s4w128"]
+server:
+  cg_sizes: [1, 2, 4, 8, 16, 32, 64, 128, 256]
+  max_model_len: 40960
+  gpu_mem: 0.90
+  max_num_seqs: 128
+  reasoning: 1                  # thinking goes to `reasoning`, the answer to `content`
+tasks:
+  - {name: aime24, kind: reasoning, task: aime24, seeds: "0,1,2,3,4,5,6,7", max_tokens: 32768, concurrency: 128}
+  - {name: aime25, kind: reasoning, task: aime25, seeds: "0,1,2,3,4,5,6,7", max_tokens: 32768, concurrency: 128}

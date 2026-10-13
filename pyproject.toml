@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flagrot"
+version = "0.1.0"
+description = "FlagRot: selective rotation for low-bit KV caches (simulator package `blockflag`)"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+dependencies = ["torch>=2.6", "transformers>=5.0", "numpy", "pandas", "pyarrow", "pyyaml"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+packages = ["blockflag"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,9 @@
+include: niah_single_1_fit.yaml
+task: ruler_cwe_fit
+custom_dataset: !function ruler_fit_utils.get_cw_dataset
+target_delimiter: "\n\n"
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 120
+  until: []
